@@ -212,8 +212,8 @@ def product_grid(items, out_items):
 
 def index_page():
     brand_tiles = "".join(
-        f'<a class="tile" href="{href}"><span class="icon">{icon}</span>{name}</a>'
-        for name, icon, href, _ in BRANDS)
+        f'<a class="tile" href="{href}"><span class="tile-icon">{icon}</span>{name}<span class="tile-note">{note}</span></a>'
+        for name, icon, href, note in BRANDS)
     popular = "".join(buy_card(n, p, note) for n, p, note in [
         ("Steam Wallet — USA $50", "$50.00", "Gift card · Instant delivery"),
         ("PlayStation Store — USA $25", "$25.00", "Gift card · Instant delivery"),
@@ -223,47 +223,63 @@ def index_page():
     ai_teaser = "".join(buy_card(n, p, note) for n, p, note in AI_TOOLS[:4])
     other_teaser = "".join(buy_card(n, p, note) for n, p, note in OTHER_TOOLS[:4])
     body = f'''
-<div class="hero"><h1>Digital gift cards. Meet Subvexa.</h1>
-<p>Buy Gift Cards with Cryptocurrency | Subvexa — Steam, PlayStation, Xbox, PUBG and 500+ brands, delivered instantly to your email and account. Pay with USDT.</p>
-<div class="cta"><a class="btn btn-green" href="gift-cards.html">Shop gift cards</a><a class="btn btn-white" href="ai-tools.html">Explore AI &amp; Tools</a></div></div>
+<div class="hero"><span class="eyebrow">Buy Gift Cards with Cryptocurrency | Subvexa</span><h1>Gift cards with crypto.<br>Delivered in seconds.</h1>
+<p>Steam, PlayStation, Xbox, PUBG and 500+ brands — pick your region, pay with USDT, and your code appears in your account and email. No waiting, no paperwork.</p>
+<div class="cta"><a class="btn btn-green" href="gift-cards.html">Shop gift cards</a><a class="btn btn-white" href="ai-tools.html">Explore AI &amp; Tools</a></div>
+<div class="hero-chips"><span>⚡ Instant delivery</span><span>₮ Pay with USDT</span><span>🛡️ Buyer Protection</span><span>🌍 8 Steam regions</span></div></div>
 {TRUST}
-{REVIEWS}
+{PROTECT}
+<div class="section-head"><h2>How it works</h2><a href="how-to-buy.html">Full guide →</a></div>
+<p class="section-sub">Four steps, under a minute.</p>
+<div class="how-strip">
+<div class="how-step"><b>Step 1</b><h3>Pick a brand &amp; region</h3><p>Match the region to your account — wrong region is the #1 mistake.</p></div>
+<div class="how-step"><b>Step 2</b><h3>Pay with USDT</h3><p>Exact amount, BEP20 wallet shown at checkout.</p></div>
+<div class="how-step"><b>Step 3</b><h3>Payment verified</h3><p>On-chain check, usually under a minute.</p></div>
+<div class="how-step"><b>Step 4</b><h3>Show Code &amp; redeem</h3><p>Code in My Orders + email. Copy, redeem, done.</p></div>
+</div>
 <div class="stats">
 <div class="stat"><b>500+</b><span>gift cards</span></div>
 <div class="stat"><b>2,218</b><span>brands in catalog</span></div>
 <div class="stat"><b>&lt;1 min</b><span>checkout</span></div>
 <div class="stat"><b>24/7</b><span>support</span></div>
 </div>
-<h2>Shop by category</h2><p class="section-sub">Pick a brand, then pick your region.</p>
+<div class="section-head"><h2>Shop by category</h2><a href="gift-cards.html">All gift cards →</a></div>
+<p class="section-sub">Pick a brand, then pick your region.</p>
 <div class="tiles">{brand_tiles}</div>
-<h2>Popular gift cards</h2><p class="section-sub">Most bought this week.</p>
+<div class="section-head"><h2>Popular gift cards</h2><a href="gift-cards.html">See all →</a></div>
+<p class="section-sub">Most bought this week.</p>
 <div class="grid">{popular}</div>
-<h2>AI &amp; Tools</h2><p class="section-sub">22 products &middot; from $0.10 &middot; auto delivery.</p>
+<div class="section-head"><h2>AI &amp; Tools</h2><a href="ai-tools.html">See all 22 →</a></div>
+<p class="section-sub">22 products &middot; from $0.10 &middot; auto delivery.</p>
 <div class="grid">{ai_teaser}</div>
-<p><a class="btn btn-ghost" href="ai-tools.html">See all 22 AI &amp; Tools →</a></p>
-<h2>Other Tools</h2><p class="section-sub">13 products &middot; VPNs, streaming, Office &amp; more.</p>
+<div class="section-head"><h2>Other Tools</h2><a href="other-tools.html">See all 13 →</a></div>
+<p class="section-sub">13 products &middot; VPNs, streaming, Office &amp; more.</p>
 <div class="grid">{other_teaser}</div>
-<p><a class="btn btn-ghost" href="other-tools.html">See all 13 Other Tools →</a></p>
-<h2>Discounts</h2><p class="section-sub">Today&apos;s best value picks.</p>
+<div class="section-head"><h2>Today&apos;s deals</h2><a href="ai-tools.html">More deals →</a></div>
+<p class="section-sub">Best value picks, updated for today. <span class="deal-badge">−33% Gemini Plus 12m</span></p>
 <div class="grid">{buy_card("Gemini Plus 12m Links", "$0.60", "Was $0.90 · AI & Tools")}{buy_card("Amazon Prime Video 1M", "$0.60", "Was $0.90 · Other Tools")}{buy_card("Outlook Mail", "$0.10", "Lowest price · Other Tools")}{buy_card("Wispr Flow Pro 2 Months", "$0.30", "AI & Tools")}</div>
+<div class="section-head"><h2>What buyers say</h2><a href="support.html">Need help? →</a></div>
+{REVIEWS}
 {LOYALTY}
-<h2>Why Subvexa?</h2>
+<div class="section-head"><h2>Why Subvexa?</h2><a href="payment-methods.html">Payment methods →</a></div>
 <div class="usps">
 <div class="usp"><div class="icon">🛡️</div><h3>Secure payments</h3><p>128-bit SSL, crypto checkout with on-chain verification, and a clear refund policy if delivery fails.</p></div>
 <div class="usp"><div class="icon">⚡</div><h3>Fast, instant delivery</h3><p>Codes appear in your account and email right after payment — click Show Code, copy, redeem.</p></div>
 <div class="usp"><div class="icon">💬</div><h3>Support in your language</h3><p>WhatsApp, Telegram and email support — support@subvexa.shop — plus step-by-step How-to guides.</p></div>
 </div>
-<h2>From the blog</h2><p class="section-sub">Buyer guides before you pay.</p>
+<div class="section-head"><h2>From the blog</h2><a href="blog.html">All guides →</a></div>
+<p class="section-sub">Buyer guides before you pay.</p>
 <div class="grid">
 <div class="card"><h3>Steam region guide: buy the right card first</h3><div class="tag">Region matching, fees and the mistakes to avoid.</div><div class="buy"><a class="btn btn-purple" href="blog/steam-region-guide.html">Read the guide →</a></div></div>
 <div class="card"><h3>How to buy on Subvexa in under a minute</h3><div class="tag">Register, pick a card, pay with USDT, Show Code.</div><div class="buy"><a class="btn btn-purple" href="how-to-buy.html">Read the guide →</a></div></div>
 <div class="card"><h3>USDT (BEP20) payments, explained simply</h3><div class="tag">What BEP20 is, and why the exact amount matters.</div><div class="buy"><a class="btn btn-purple" href="payment-methods.html">Read the guide →</a></div></div>
-</div>'''
+</div>
+<div class="cta-banner"><div><h2>Not sure where to start?</h2><p>Steam $50 is the most bought card this week — check your Steam region first, then buy in under a minute.</p></div><a class="btn btn-green" href="brand/steam.html">Start with Steam →</a></div>'''
     write("index.html", page("Buy Gift Cards with Cryptocurrency", "index.html", body))
 
 def gift_cards_page():
     tiles = "".join(
-        f'<a class="tile" href="{href}"><span class="icon">{icon}</span>{name}<br><span class="tag">{note}</span></a>'
+        f'<a class="tile" href="{href}"><span class="tile-icon">{icon}</span>{name}<span class="tile-note">{note}</span></a>'
         for name, icon, href, note in BRANDS)
     body = f'''<h1 style="margin-top:0">Gift Cards</h1>
 <p class="section-sub">Pick a brand, then pick your region — each region is a separate card with its own denominations. Prices are indicative; the final price is verified before payment.</p>
