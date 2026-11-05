@@ -240,3 +240,57 @@ header.site{box-shadow:0 2px 12px rgba(15,23,42,.06)}
   .cta-banner{padding:24px 20px}
   .tiles{grid-template-columns:repeat(2,1fr)}
 }
+
+/* ---- Attractive v4 — internet learnings, same Subvexa theme ---- */
+/* 50ms first impression: one clear hero, product-is-the-demo, social proof in first scroll, purposeful motion only. No extra gradients, no glassmorphism. */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.hero{animation:fadeUp .5s ease both}
+.hero-split{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center}
+.hero-split h1{font-size:48px}
+.hero-visual{position:relative;z-index:1}
+.showcase{background:#0f172a;color:#e2e8f0;border:1px solid rgba(94,234,212,.35);border-radius:20px;padding:22px;box-shadow:0 20px 44px rgba(15,23,42,.35);transform:rotate(1.2deg);transition:transform .2s ease}
+.showcase:hover{transform:rotate(0deg) translateY(-3px)}
+.showcase-top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:800;color:#fff}
+.showcase h3{color:#fff;margin:12px 0 4px;font-size:20px}
+.showcase .stars{color:#f59e0b;font-weight:800}
+.showcase .stars span{color:#94a3b8;font-weight:600;font-size:13px}
+.showcase-price{font-size:30px;font-weight:800;color:#fff;margin:10px 0 4px}
+.showcase .tracker{grid-template-columns:repeat(3,1fr)}
+.showcase .tracker span{background:#1e293b;border-color:#334155;color:#94a3b8}
+.showcase .tracker span.done{background:#064e3b;border-color:#10b981;color:#a7f3d0}
+.showcase .tracker span.done small{color:#6ee7b7}
+.showcase .codebox{margin-top:12px}
+.showcase .buy{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.pill-instant{background:#dcfce7;color:#166534;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:800}
+.ticker{overflow:hidden;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:10px 0;margin-bottom:20px;white-space:nowrap}
+.ticker-track{display:inline-block;animation:tickerScroll 28s linear infinite;font-weight:800;color:#4c1d95;letter-spacing:.02em}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker-track span{margin:0 18px}
+.card{position:relative;overflow:hidden;border-radius:18px}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#6d28d9,#3b82f6,#5eead4)}
+.card-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px}
+.card-meta .stars-sm{color:#f59e0b;font-weight:800;letter-spacing:1px}
+.card:hover .card-meta{transform:none}
+.tile-icon{background:var(--band,#f5f3ff)}
+.bento{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin-bottom:8px}
+.bento-big{background:linear-gradient(120deg,#1e1b4b,#5b2bd9 60%,#3b82f6);color:#fff;border-radius:20px;padding:26px;grid-row:span 2;display:flex;flex-direction:column;justify-content:flex-end;min-height:220px}
+.bento-big h3{color:#fff;font-size:26px;margin:0 0 6px}
+.bento-big p{color:#e0e7ff;margin:0 0 16px;max-width:420px}
+.bento-small{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:22px}
+.bento-small h3{margin:0 0 4px}
+.bento-small p{color:#64748b;margin:0 0 14px;font-size:14px}
+.bento-big:hover,.bento-small:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(15,23,42,.12)}
+.bento-big,.bento-small{transition:transform .15s ease,box-shadow .15s ease}
+@media(max-width:640px){
+  .hero-split{grid-template-columns:1fr}
+  .hero-split h1{font-size:30px}
+  .showcase{transform:none}
+  .bento{grid-template-columns:1fr}
+  .bento-big{grid-row:auto;min-height:0}
+}
+@media(prefers-reduced-motion:reduce){
+  .ticker-track{animation:none}
+  .hero{animation:none}
+  *{transition:none!important}
+}

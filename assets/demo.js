@@ -275,7 +275,7 @@
         '<div class="price">' + fmt(eff.price) + '</div><div class="tag">Currently out of stock</div>' +
         '<div class="buy"><button class="notify" data-notify="' + esc(eff.name) + '">🔔 Notify me</button></div></div>';
     }
-    return '<div class="card" data-pid="' + eff.id + '"><h3>' + esc(eff.name) + '</h3>' +
+    return '<div class="card" data-pid="' + eff.id + '"><div class="card-meta"><span class="pill-instant">⚡ Instant</span><span class="stars-sm">★★★★★</span></div><h3>' + esc(eff.name) + '</h3>' +
       '<div class="price">' + fmt(eff.price) + '</div>' +
       (eff.low ? '<div class="low-stock">⚡ Only ' + eff.low + ' left</div>' : '') +
       '<div class="tag">' + esc(eff.note || 'Auto delivery') + '</div>' +

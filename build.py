@@ -95,7 +95,7 @@ def buy_card(name, price, note="", out=False, notify_name=None):
         return (f'<div class="card out" data-pid="{pid}"><h3>{name}</h3><div class="price">{price}</div>'
                 f'<div class="tag">{note or "Currently out of stock"}</div>'
                 f'<div class="buy"><button class="notify" data-notify="{notify_name or name}">🔔 Notify me</button></div></div>')
-    return (f'<div class="card" data-pid="{pid}"><h3>{name}</h3><div class="price">{price}</div>{low}'
+    return (f'<div class="card" data-pid="{pid}"><div class="card-meta"><span class="pill-instant">⚡ Instant</span><span class="stars-sm">★★★★★</span></div><h3>{name}</h3><div class="price">{price}</div>{low}'
             f'<div class="tag">{note}</div>'
             f'<div class="buy"><button class="btn btn-green" data-add="{pid}">Add to cart</button> '
             f'<button class="btn btn-ghost" data-buynow="{pid}">Buy now</button></div></div>')
@@ -189,18 +189,18 @@ OTHER_TOOLS = [
 OTHER_OUT = ["YouTube Premium 3-month Coupons", "Surfshark VPN 2M Private Accounts"]
 
 BRANDS = [
-    ("Steam", "🎮", "brand/steam.html", "USA, Europe, KSA, UAE & more"),
-    ("PlayStation", "🎮", "gift-cards.html", "PSN cards · USA, UK, KSA, UAE"),
-    ("Xbox", "🎮", "gift-cards.html", "Xbox Live · USA, UK, Europe"),
-    ("Apple", "🍎", "gift-cards.html", "App Store & iTunes · many regions"),
-    ("Google Play", "▶️", "gift-cards.html", "Play credit · USA, India & more"),
-    ("Amazon", "🛒", "gift-cards.html", "Amazon gift cards · USA, UK"),
-    ("PUBG Mobile", "🔫", "gift-cards.html", "UC top-up · Global"),
-    ("Roblox", "🧱", "gift-cards.html", "Roblox credit · USA"),
-    ("Netflix", "🎬", "gift-cards.html", "Netflix gift cards · many regions"),
-    ("Spotify", "🎵", "gift-cards.html", "Premium gift cards"),
-    ("Nintendo", "🕹️", "gift-cards.html", "eShop cards · USA, Europe"),
-    ("Razer Gold", "⚡", "gift-cards.html", "Razer Gold · Global"),
+    ("Steam", "🎮", "brand/steam.html", "USA, Europe, KSA, UAE & more", "#1b2838"),
+    ("PlayStation", "🎮", "gift-cards.html", "PSN cards · USA, UK, KSA, UAE", "#0070d1"),
+    ("Xbox", "🎮", "gift-cards.html", "Xbox Live · USA, UK, Europe", "#107c10"),
+    ("Apple", "🍎", "gift-cards.html", "App Store & iTunes · many regions", "#111827"),
+    ("Google Play", "▶️", "gift-cards.html", "Play credit · USA, India & more", "#01875f"),
+    ("Amazon", "🛒", "gift-cards.html", "Amazon gift cards · USA, UK", "#b45309"),
+    ("PUBG Mobile", "🔫", "gift-cards.html", "UC top-up · Global", "#92400e"),
+    ("Roblox", "🧱", "gift-cards.html", "Roblox credit · USA", "#b91c1c"),
+    ("Netflix", "🎬", "gift-cards.html", "Netflix gift cards · many regions", "#b91c1c"),
+    ("Spotify", "🎵", "gift-cards.html", "Premium gift cards", "#15803d"),
+    ("Nintendo", "🕹️", "gift-cards.html", "eShop cards · USA, Europe", "#be123c"),
+    ("Razer Gold", "⚡", "gift-cards.html", "Razer Gold · Global", "#15803d"),
 ]
 
 # ---------------- pages ----------------
@@ -212,8 +212,8 @@ def product_grid(items, out_items):
 
 def index_page():
     brand_tiles = "".join(
-        f'<a class="tile" href="{href}"><span class="tile-icon">{icon}</span>{name}<span class="tile-note">{note}</span></a>'
-        for name, icon, href, note in BRANDS)
+        f'<a class="tile" href="{href}" style="--band:{band}"><span class="tile-icon">{icon}</span>{name}<span class="tile-note">{note}</span></a>'
+        for name, icon, href, note, band in BRANDS)
     popular = "".join(buy_card(n, p, note) for n, p, note in [
         ("Steam Wallet — USA $50", "$50.00", "Gift card · Instant delivery"),
         ("PlayStation Store — USA $25", "$25.00", "Gift card · Instant delivery"),
@@ -223,10 +223,12 @@ def index_page():
     ai_teaser = "".join(buy_card(n, p, note) for n, p, note in AI_TOOLS[:4])
     other_teaser = "".join(buy_card(n, p, note) for n, p, note in OTHER_TOOLS[:4])
     body = f'''
-<div class="hero"><span class="eyebrow">Buy Gift Cards with Cryptocurrency | Subvexa</span><h1>Gift cards with crypto.<br>Delivered in seconds.</h1>
+<div class="hero hero-split"><div><span class="eyebrow">Buy Gift Cards with Cryptocurrency | Subvexa</span><h1>Gift cards with crypto.<br>Delivered in seconds.</h1>
 <p>Steam, PlayStation, Xbox, PUBG and 500+ brands — pick your region, pay with USDT, and your code appears in your account and email. No waiting, no paperwork.</p>
 <div class="cta"><a class="btn btn-green" href="gift-cards.html">Shop gift cards</a><a class="btn btn-white" href="ai-tools.html">Explore AI &amp; Tools</a></div>
 <div class="hero-chips"><span>⚡ Instant delivery</span><span>₮ Pay with USDT</span><span>🛡️ Buyer Protection</span><span>🌍 8 Steam regions</span></div></div>
+<div class="hero-visual"><div class="showcase"><div class="showcase-top"><span>🎮 Steam · USA</span><span class="pill-instant">⚡ Instant</span></div><h3>Steam Wallet — USA $50</h3><div class="stars">★★★★★ <span>4.8 · 2,300+ bought (demo)</span></div><div class="showcase-price">$50.00</div><div class="tracker"><span class="done">Paid<br><small>14:02:21</small></span><span class="done">Code issued<br><small>14:02:26</small></span><span class="done">Delivered<br><small>~30 sec</small></span></div><div class="codebox"><span>DEMO-7K2Q-9X4M-3P8W</span><button class="copybtn" data-copy="DEMO-7K2Q-9X4M-3P8W">Copy</button></div><p class="tag" style="color:#94a3b8">Sample delivery preview — demo code, not a real code.</p><div class="buy"><button class="btn btn-green" data-add="gc-steam-50">Add to cart</button> <button class="btn btn-ghost" data-buynow="gc-steam-50" style="background:#fff;color:#4f46e5">Buy now</button></div></div></div></div>
+<div class="ticker"><div class="ticker-track"><span>🎮 Steam</span><span>•</span><span>PlayStation</span><span>•</span><span>Xbox</span><span>•</span><span>PUBG Mobile</span><span>•</span><span>Netflix</span><span>•</span><span>Spotify</span><span>•</span><span>Roblox</span><span>•</span><span>Apple</span><span>•</span><span>Google Play</span><span>•</span><span>Amazon</span><span>•</span><span>🎮 Steam</span><span>•</span><span>PlayStation</span><span>•</span><span>Xbox</span><span>•</span><span>PUBG Mobile</span><span>•</span><span>Netflix</span><span>•</span><span>Spotify</span><span>•</span><span>Roblox</span><span>•</span><span>Apple</span><span>•</span><span>Google Play</span><span>•</span><span>Amazon</span><span>•</span></div></div>
 {TRUST}
 {PROTECT}
 <div class="section-head"><h2>How it works</h2><a href="how-to-buy.html">Full guide →</a></div>
@@ -242,6 +244,13 @@ def index_page():
 <div class="stat"><b>2,218</b><span>brands in catalog</span></div>
 <div class="stat"><b>&lt;1 min</b><span>checkout</span></div>
 <div class="stat"><b>24/7</b><span>support</span></div>
+</div>
+<div class="section-head"><h2>Featured right now</h2><a href="gift-cards.html">All gift cards →</a></div>
+<p class="section-sub">The three places most buyers start.</p>
+<div class="bento">
+<a class="bento-big" href="brand/steam.html"><span class="eyebrow">🎮 Most bought</span><h3>Steam Gift Cards</h3><p>8 regions, $10–$100. Pick the region that matches your Steam account — the region checker highlights it for you.</p><span class="btn btn-green">Shop Steam →</span></a>
+<a class="bento-small" href="ai-tools.html"><h3>🤖 AI &amp; Tools</h3><p>22 products · from $0.10 · auto delivery</p><span class="btn btn-ghost">See all 22 →</span></a>
+<a class="bento-small" href="other-tools.html"><h3>🛠️ Other Tools</h3><p>13 products · VPNs, streaming, Office &amp; more</p><span class="btn btn-ghost">See all 13 →</span></a>
 </div>
 <div class="section-head"><h2>Shop by category</h2><a href="gift-cards.html">All gift cards →</a></div>
 <p class="section-sub">Pick a brand, then pick your region.</p>
@@ -279,8 +288,8 @@ def index_page():
 
 def gift_cards_page():
     tiles = "".join(
-        f'<a class="tile" href="{href}"><span class="tile-icon">{icon}</span>{name}<span class="tile-note">{note}</span></a>'
-        for name, icon, href, note in BRANDS)
+        f'<a class="tile" href="{href}" style="--band:{band}"><span class="tile-icon">{icon}</span>{name}<span class="tile-note">{note}</span></a>'
+        for name, icon, href, note, band in BRANDS)
     body = f'''<h1 style="margin-top:0">Gift Cards</h1>
 <p class="section-sub">Pick a brand, then pick your region — each region is a separate card with its own denominations. Prices are indicative; the final price is verified before payment.</p>
 {TRUST}
