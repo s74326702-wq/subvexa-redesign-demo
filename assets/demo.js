@@ -23,8 +23,8 @@
   }
 
   // ---------- catalog (mirrors build.py) ----------
-  function p(id, name, price, section, note, out) {
-    return { id: id, name: name, price: price, section: section, note: note || '', out: !!out };
+  function p(id, name, price, section, note, out, low) {
+    return { id: id, name: name, price: price, section: section, note: note || '', out: !!out, low: low || 0 };
   }
   var CATALOG = [
     // AI & Tools (22)
@@ -35,7 +35,7 @@
     p('ai-elevenlabs', 'Elevenlabs Creator 3M', 10.00, 'ai-tools', 'Auto delivery'),
     p('ai-figma', 'Figma Pro Edu 2 Yr', 5.30, 'ai-tools', 'Auto delivery'),
     p('ai-framer', 'Framer Basic Plan 12M', 9.00, 'ai-tools', 'Auto delivery'),
-    p('ai-gemini-12m', 'Gemini Plus 12m Links', 0.60, 'ai-tools', 'Auto delivery'),
+    p('ai-gemini-12m', 'Gemini Plus 12m Links', 0.60, 'ai-tools', 'Auto delivery', false, 3),
     p('ai-jetbrains', 'JetBrains Edu Pack 12M', 4.50, 'ai-tools', 'Auto delivery'),
     p('ai-miro', 'Miro Edu Panel 100 Invites · Lifetime', 12.00, 'ai-tools', 'Auto delivery'),
     p('ai-claude-stable', 'Muse AI stable Account — 1B Tokens', 0.30, 'ai-tools', 'Auto delivery'),
@@ -63,14 +63,14 @@
     p('ot-linkedin-sales', 'LinkedIn Sales Navigator Core 2M', 1.50, 'other-tools', 'Auto delivery'),
     p('ot-linkedin-career', 'LinkedIn Career 3M', 1.10, 'other-tools', 'Auto delivery'),
     p('ot-crunchyroll', 'Crunchyroll 1 Month Link', 0.80, 'other-tools', 'Auto delivery'),
-    p('ot-outlook', 'Outlook Mail', 0.10, 'other-tools', 'Auto delivery'),
+    p('ot-outlook', 'Outlook Mail', 0.10, 'other-tools', 'Auto delivery', false, 5),
     p('ot-youtube-premium', 'YouTube Premium 3-month Coupons', 1.40, 'other-tools', 'Out of stock', true),
     p('ot-surfshark', 'Surfshark VPN 2M Private Accounts', 4.50, 'other-tools', 'Out of stock', true),
     // Gift cards
     p('gc-steam-10', 'Steam Wallet — USA $10', 10.00, 'gift-cards', 'Gift card · Instant delivery'),
     p('gc-steam-25', 'Steam Wallet — USA $25', 25.00, 'gift-cards', 'Gift card · Instant delivery'),
     p('gc-steam-50', 'Steam Wallet — USA $50', 50.00, 'gift-cards', 'Gift card · Instant delivery'),
-    p('gc-steam-100', 'Steam Wallet — USA $100', 100.00, 'gift-cards', 'Gift card · Instant delivery'),
+    p('gc-steam-100', 'Steam Wallet — USA $100', 100.00, 'gift-cards', 'Gift card · Instant delivery', false, 2),
     p('gc-psn-25', 'PlayStation Store — USA $25', 25.00, 'gift-cards', 'Gift card · Instant delivery'),
     p('gc-xbox-25', 'Xbox Live — USA $25', 25.00, 'gift-cards', 'Gift card · Instant delivery'),
     p('gc-pubg-600', 'PUBG Mobile UC 600', 9.99, 'gift-cards', 'Top-up · Instant delivery')
@@ -99,6 +99,23 @@
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  // ---------- helpers: region, time, loyalty ----------
+  var REGIONS = ['USA', 'Europe', 'KSA', 'UAE', 'India', 'Turkey', 'Hong Kong', 'Singapore'];
+  function regionOf(item) {
+    var name = item.name || '';
+    for (var i = 0; i < REGIONS.length; i++) if (name.indexOf(REGIONS[i]) !== -1) return REGIONS[i];
+    return 'Account / Global';
+  }
+  function stamp(d) {
+    try { return d.toLocaleTimeString('en-GB', { hour12: false }); }
+    catch (e) { return String(d); }
+  }
+  function stampOffset(base, sec) { return stamp(new Date(base.getTime() + sec * 1000)); }
+  function loyaltyPoints() {
+    return getOrders().filter(function (o) { return o.status === 'DELIVERED'; })
+      .reduce(function (n, o) { return n + Math.round(o.total * 5); }, 0);
+  }
+
   // ---------- demo codes / orders ----------
   var CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   function genCode() {
@@ -124,15 +141,19 @@
     if (existing) return existing;
     var seed = [
       { code: 'DG-STEAM-001', date: '5 Nov 2026', status: 'DELIVERED', method: 'USDT (BEP20)',
+        tl: { ordered: '14:02:01', paid: '14:02:21', issued: '14:02:26', delivered: '14:02:31' },
         items: [{ id: 'gc-steam-50', name: 'Steam Wallet — USA $50', price: 50.00, qty: 1, section: 'gift-cards' }],
         total: 50.00, delivered: [{ label: 'Steam Wallet — USA $50', code: 'DEMO-7K2Q-9X4M-3P8W', note: 'Demo sample code — not a real code' }] },
       { code: 'DG-9441BD8ECC', date: '5 Nov 2026', status: 'DELIVERED', method: 'USDT (BEP20)',
+        tl: { ordered: '10:49:03', paid: '10:49:24', issued: '10:49:29', delivered: '10:49:34' },
         items: [{ id: 'ot-outlook', name: 'Outlook Mail', price: 0.10, qty: 1, section: 'other-tools' }],
         total: 0.10, delivered: [{ label: 'Outlook Mail account', code: 'demo-account@example.com', note: 'Demo account — not real credentials' }] },
       { code: 'DG-20261105-002', date: '5 Nov 2026', status: 'AWAITING_PAYMENT', method: 'USDT (BEP20)',
+        tl: { ordered: '15:20:00' },
         items: [{ id: 'ai-gemini-12m', name: 'Gemini Plus 12m Links', price: 0.60, qty: 1, section: 'ai-tools' }],
         total: 0.60, delivered: [] },
       { code: 'DG-20261104-009', date: '4 Nov 2026', status: 'FAILED', method: 'USDT (BEP20)',
+        tl: { ordered: '09:11:00' },
         items: [{ id: 'ai-canva', name: 'Canva Pro Edu Panel 500 Invites', price: 4.20, qty: 1, section: 'ai-tools' }],
         total: 4.20, delivered: [], failReason: 'Demo: payment window expired before payment was confirmed.' }
     ];
@@ -187,7 +208,8 @@
     var cart = getCart();
     if (!cart.length) return { ok: false, error: 'Your cart is empty (demo).' };
     var order = { code: genOrderCode(), date: new Date().toDateString(), status: 'AWAITING_PAYMENT',
-      method: method || 'USDT (BEP20)', items: cart, total: cartTotal(), delivered: [] };
+      method: method || 'USDT (BEP20)', items: cart, total: cartTotal(), delivered: [],
+      tl: { ordered: stamp(new Date()) } };
     var orders = getOrders(); orders.unshift(order); saveOrders(orders);
     clearCart();
     return { ok: true, order: order };
@@ -195,7 +217,12 @@
   function markOrderDelivered(code) {
     var orders = getOrders(), done = null;
     orders.forEach(function (o) {
-      if (o.code === code) { o.status = 'DELIVERED'; o.delivered = deliveredItemsFor(o.items); done = o; }
+      if (o.code === code) {
+        o.status = 'DELIVERED'; o.delivered = deliveredItemsFor(o.items);
+        var now = new Date(); o.tl = o.tl || {};
+        o.tl.paid = stampOffset(now, -10); o.tl.issued = stampOffset(now, -5); o.tl.delivered = stamp(now);
+        done = o;
+      }
     });
     if (done) saveOrders(orders);
     return done;
@@ -249,7 +276,9 @@
         '<div class="buy"><button class="notify" data-notify="' + esc(eff.name) + '">🔔 Notify me</button></div></div>';
     }
     return '<div class="card" data-pid="' + eff.id + '"><h3>' + esc(eff.name) + '</h3>' +
-      '<div class="price">' + fmt(eff.price) + '</div><div class="tag">' + esc(eff.note || 'Auto delivery') + '</div>' +
+      '<div class="price">' + fmt(eff.price) + '</div>' +
+      (eff.low ? '<div class="low-stock">⚡ Only ' + eff.low + ' left</div>' : '') +
+      '<div class="tag">' + esc(eff.note || 'Auto delivery') + '</div>' +
       '<div class="buy"><button class="btn btn-green" data-add="' + eff.id + '">Add to cart</button> ' +
       '<button class="btn btn-ghost" data-buynow="' + eff.id + '">Buy now</button></div></div>';
   }
@@ -284,7 +313,9 @@
       body = o.delivered.map(function (d) {
         return '<div class="codebox"><span>' + esc(d.label) + ': <strong>' + esc(d.code) + '</strong><br><span style="font-size:12px;color:#94a3b8">' + esc(d.note || '') + '</span></span>' +
           '<button class="copybtn" data-copy="' + esc(d.code) + '">Copy</button></div>';
-      }).join('') + '<p class="tag">Delivered items are shown only when the order is DELIVERED.</p>';
+      }).join('') +
+        '<p><button class="btn btn-ghost" data-resend="' + esc(o.code) + '">📧 Resend code</button> <span class="tag resend-note" id="resend-' + esc(o.code) + '"></span></p>' +
+        '<p class="tag">Delivered items are shown only when the order is DELIVERED. Resend re-sends the demo delivery email (not actually sent).</p>';
     } else if (o.status === 'AWAITING_PAYMENT') {
       var page = SECTION_PAGE[o.items[0].section] || 'gift-cards.html';
       body = '<p class="tag">No items yet — they appear here only after payment is confirmed and the order is DELIVERED.</p>' +
@@ -293,14 +324,20 @@
       body = '<p class="tag">' + esc(o.failReason || 'This demo order failed.') + '</p>' +
         '<a class="btn btn-ghost" href="' + pfx + 'support.html">Contact support →</a>';
     }
+    var tl = o.tl || {};
+    var tracker = '<div class="tracker">' +
+      '<span class="' + (o.status === 'FAILED' ? 'failed' : (tl.paid ? 'done' : '')) + '">Paid' + (tl.paid ? '<br><small>' + esc(tl.paid) + '</small>' : '<br><small>pending</small>') + '</span>' +
+      '<span class="' + (o.status === 'DELIVERED' ? 'done' : '') + '">Code issued' + (tl.issued ? '<br><small>' + esc(tl.issued) + '</small>' : '<br><small>pending</small>') + '</span>' +
+      '<span class="' + (o.status === 'DELIVERED' ? 'done' : '') + '">Delivered' + (tl.delivered ? '<br><small>' + esc(tl.delivered) + '</small>' : '<br><small>pending</small>') + '</span>' +
+      '</div>';
     var timeline = '<details class="timeline"><summary>Order timeline</summary><ol>' +
-      '<li>✅ Ordered — ' + esc(o.date) + '</li>' +
+      '<li>✅ Ordered — ' + esc(o.date) + (tl.ordered ? ' ' + esc(tl.ordered) : '') + '</li>' +
       (o.status === 'FAILED' ? '<li>❌ Payment not confirmed — order expired (demo)</li>'
-        : '<li>' + (o.status === 'DELIVERED' ? '✅' : '⏳') + ' Payment ' + (o.status === 'DELIVERED' ? 'confirmed' : 'awaiting confirmation') + '</li>' +
-          '<li>' + (o.status === 'DELIVERED' ? '✅ Cards issued' : '⏳ Cards being issued') + '</li>' +
-          '<li>' + (o.status === 'DELIVERED' ? '✅ Delivered — Show Code' : '⏳ Delivery pending') + '</li>') +
+        : '<li>' + (o.status === 'DELIVERED' ? '✅' : '⏳') + ' Payment ' + (o.status === 'DELIVERED' ? 'confirmed' + (tl.paid ? ' at ' + esc(tl.paid) : '') : 'awaiting confirmation') + '</li>' +
+          '<li>' + (o.status === 'DELIVERED' ? '✅ Cards issued' + (tl.issued ? ' at ' + esc(tl.issued) : '') : '⏳ Cards being issued') + '</li>' +
+          '<li>' + (o.status === 'DELIVERED' ? '✅ Delivered — Show Code' + (tl.delivered ? ' at ' + esc(tl.delivered) : '') + ' · delivered in ~30 seconds (demo)' : '⏳ Delivery pending') + '</li>') +
       '</ol></details>';
-    return head + body + timeline + '</div>';
+    return head + body + tracker + timeline + '</div>';
   }
   function renderOrders(rootId, filter) {
     var root = document.getElementById(rootId); if (!root) return;
@@ -340,6 +377,32 @@
       return productCardHTML(prod, 0);
     }).join('') + '</div>' : '<p class="tag">No matches in the demo catalog. Try “Steam”, “VPN”, “Gemini” or “Outlook”.</p>';
   }
+  // Region check + express consent (EU digital-goods rule) for checkout.
+  function regionListHTML(cart) {
+    return '<ul>' + cart.map(function (it) {
+      return '<li>' + esc(it.name) + ' — region: <strong>' + esc(regionOf(it)) + '</strong></li>';
+    }).join('') + '</ul>';
+  }
+  function updateRegionCheck() {
+    if (typeof document === 'undefined') return;
+    var sel = document.getElementById('region-check-select');
+    var res = document.getElementById('region-check-result');
+    if (!sel || !res) return;
+    var picked = sel.value;
+    if (!picked) { res.textContent = 'Pick your account region above to check for mismatches (demo).'; res.style.color = ''; return; }
+    var warns = [];
+    getCart().forEach(function (it) {
+      var r = regionOf(it);
+      if (r !== 'Account / Global' && r !== picked) warns.push(it.name + ' is a ' + r + ' code — it will not redeem on a ' + picked + ' account.');
+    });
+    if (warns.length) { res.innerHTML = '⚠️ ' + warns.map(esc).join('<br>⚠️ '); res.style.color = '#b45309'; }
+    else { res.textContent = '✓ All regions match your ' + picked + ' account (demo check).'; res.style.color = '#047857'; }
+  }
+  function updatePayButton() {
+    if (typeof document === 'undefined') return;
+    var c = document.getElementById('consent-check'), a = document.getElementById('age-check'), b = document.getElementById('pay-now');
+    if (b) b.disabled = !(c && c.checked && a && a.checked);
+  }
   function renderCheckout() {
     var root = document.getElementById('checkout-root'); if (!root) return;
     var cart = getCart();
@@ -359,12 +422,19 @@
       '</div>' +
       '<div class="box"><h3 style="margin-top:0">Step 2 · Review your order</h3><table><tr><th>Product</th><th>Qty</th><th>Total</th></tr>' + items +
       '</table><p style="margin-top:12px">Total: <strong id="checkout-total">' + fmt(cartTotal()) + '</strong> · Pay exactly this amount in USDT.</p></div>' +
+      '<div class="box"><h3 style="margin-top:0">Step 2.5 · Region check (demo)</h3>' +
+      '<p>Region mismatch is the #1 reason gift-card orders fail. Each item below shows the region it works on — make sure it matches your account:</p>' +
+      regionListHTML(cart) +
+      '<p><label>My account region<br><select id="region-check-select"><option value="">— Select your account region —</option><option>USA</option><option>Europe</option><option>KSA</option><option>UAE</option><option>India</option><option>Turkey</option><option>Hong Kong</option><option>Singapore</option></select></label></p>' +
+      '<div id="region-check-result" class="tag">Pick your account region above to check for mismatches (demo).</div></div>' +
       '<div class="box"><h3 style="margin-top:0">Step 3 · Payment method (demo)</h3>' +
       '<label class="payopt"><input type="radio" name="paymethod" value="USDT (BEP20)" checked> <strong>USDT (BEP20)</strong> — demo, recommended</label>' +
       '<label class="payopt"><input type="radio" name="paymethod" value="USDT (TRC20)"> USDT (TRC20) — demo, not live</label>' +
       '<label class="payopt"><input type="radio" name="paymethod" value="Card (demo)"> Card — demo only, not live</label>' +
       '<p class="tag">Demo checkout: no real payment is taken and no funds move.</p>' +
-      '<button class="btn btn-green" id="pay-now">Pay ' + fmt(cartTotal()) + ' (demo) →</button> <a class="btn btn-ghost" href="cart.html">← Back to cart</a></div>' +
+      '<label class="payopt consent"><input type="checkbox" id="consent-check"> I agree to instant delivery and understand the code cannot be returned once revealed (demo — EU digital-content rule).</label>' +
+      '<label class="payopt consent"><input type="checkbox" id="age-check"> I confirm I am 18 or older.</label>' +
+      '<button class="btn btn-green" id="pay-now" disabled>Pay ' + fmt(cartTotal()) + ' (demo) →</button> <a class="btn btn-ghost" href="cart.html">← Back to cart</a></div>' +
       '<div class="box" id="pay-box" style="display:none"></div>' +
       '<div class="box" id="delivery-box" style="display:none"></div>';
     var signin = document.getElementById('demo-signin');
@@ -374,9 +444,23 @@
     });
     var payBtn = document.getElementById('pay-now');
     if (payBtn) payBtn.addEventListener('click', function () { startPayment(); });
+    var consent = document.getElementById('consent-check');
+    if (consent) consent.addEventListener('change', updatePayButton);
+    var age = document.getElementById('age-check');
+    if (age) age.addEventListener('change', updatePayButton);
+    var regionSel = document.getElementById('region-check-select');
+    if (regionSel) regionSel.addEventListener('change', updateRegionCheck);
+    updatePayButton();
   }
   var payTimer = null;
   function startPayment() {
+    if (typeof document !== 'undefined') {
+      var c = document.getElementById('consent-check'), a = document.getElementById('age-check');
+      if ((c && !c.checked) || (a && !a.checked)) {
+        openDemoModal('Consent needed (demo)', 'Please tick both boxes — instant-delivery consent and the 18+ confirmation — before paying (demo).');
+        return;
+      }
+    }
     var method = 'USDT (BEP20)';
     var sel = document.querySelector('input[name="paymethod"]:checked');
     if (sel) method = sel.value;
@@ -432,12 +516,22 @@
     if (!box || !order) return;
     box.style.display = 'block';
     var user = getUser() || { name: 'Demo User', email: 'demo@subvexa.shop' };
+    var tl = order.tl || {};
+    var tracker = '<div class="tracker">' +
+      '<span class="done">Paid' + (tl.paid ? '<br><small>' + esc(tl.paid) + '</small>' : '') + '</span>' +
+      '<span class="done">Code issued' + (tl.issued ? '<br><small>' + esc(tl.issued) + '</small>' : '') + '</span>' +
+      '<span class="done">Delivered in ~30s' + (tl.delivered ? '<br><small>' + esc(tl.delivered) + '</small>' : '') + '</span>' +
+      '</div>';
+    var pts = Math.round(order.total * 5);
     box.innerHTML = '<h3 style="margin-top:0">✅ Delivered — order ' + esc(order.code) + '</h3>' +
       '<p>Your demo codes are below. They are SAMPLE codes — not real.</p>' +
+      tracker +
+      '<p class="tag">⏱️ Delivered in ~30 seconds after payment confirmation (demo).</p>' +
       order.delivered.map(function (d) {
         return '<div class="codebox"><span>' + esc(d.label) + ': <strong>' + esc(d.code) + '</strong></span>' +
           '<button class="copybtn" data-copy="' + esc(d.code) + '">Copy</button></div>';
       }).join('') +
+      '<p class="tag">🎁 You earned <strong>' + pts + ' demo Subvexa Rewards points</strong> (5% back, demo) — see your balance in <a href="account.html">My Account</a>.</p>' +
       '<h4>📧 Email preview (demo)</h4><div class="email-preview"><p><strong>From:</strong> Subvexa &lt;support@subvexa.shop&gt;<br>' +
       '<strong>To:</strong> ' + esc(user.email) + '<br><strong>Subject:</strong> Your Subvexa order ' + esc(order.code) + ' is delivered</p>' +
       '<p>Hi ' + esc(user.name) + ',</p><p>Your order ' + esc(order.code) + ' (' + fmt(order.total) + ') is delivered. ' +
@@ -493,6 +587,8 @@
     var user = getUser() || { name: 'Demo User', email: 'demo@subvexa.shop', phone: '' };
     var prefs = lsGet(K.prefs, { email: true, sms: false, offers: true });
     root.innerHTML =
+      '<div class="box loyalty"><h3 style="margin-top:0">🎁 Subvexa Rewards (demo)</h3>' +
+      '<p>Your demo points balance: <strong>' + loyaltyPoints() + ' points</strong> — you earn 5% back on every delivered order. 100 points = $1 off your next order (demo). Points are stored only in this browser.</p></div>' +
       '<div class="box"><h3 style="margin-top:0">Profile (demo)</h3>' +
       '<p><label>Name<br><input id="acc-name" value="' + esc(user.name) + '"></label></p>' +
       '<p><label>Email<br><input id="acc-email" value="' + esc(user.email) + '"></label></p>' +
@@ -526,6 +622,53 @@
     if (typeof document === 'undefined') return;
     updateCartCount();
     applyOverrides();
+    // Loyalty balance on the homepage strip (demo).
+    var lb = document.getElementById('loyalty-balance');
+    if (lb) lb.textContent = loyaltyPoints() + ' points';
+    // Steam region checker (demo): highlight the matching region card.
+    var regionSel = document.getElementById('region-select');
+    if (regionSel) {
+      regionSel.addEventListener('change', function () {
+        var picked = regionSel.value;
+        var res = document.getElementById('region-result');
+        document.querySelectorAll('#main-grid [data-region]').forEach(function (card) {
+          var r = card.getAttribute('data-region');
+          if (!picked) { card.classList.remove('region-match'); card.classList.remove('region-dim'); return; }
+          if (r === picked) { card.classList.add('region-match'); card.classList.remove('region-dim'); }
+          else { card.classList.add('region-dim'); card.classList.remove('region-match'); }
+        });
+        if (res) res.textContent = picked ? ('✓ ' + picked + ' highlighted — buy the ' + picked + ' card for a ' + picked + ' Steam account (demo).') : 'Select your Steam account country to highlight the matching region.';
+      });
+    }
+    // 24/7 support chat widget (demo — canned bot replies, nothing leaves the browser).
+    var chatFab = document.getElementById('chat-fab');
+    var chatPanel = document.getElementById('chat-panel');
+    function chatToggle(show) { if (chatPanel) chatPanel.style.display = show ? 'block' : 'none'; }
+    if (chatFab) chatFab.addEventListener('click', function () { chatToggle(!chatPanel || chatPanel.style.display === 'none'); });
+    var chatClose = document.getElementById('chat-close');
+    if (chatClose) chatClose.addEventListener('click', function () { chatToggle(false); });
+    function chatReply(q) {
+      var s = (q || '').toLowerCase();
+      if (s.indexOf('deliver') !== -1 || s.indexOf('code') !== -1) return 'Demo answer: codes are delivered in ~30 seconds after payment — check My Orders and click Show Code. If nothing arrives in 30 minutes, email support@subvexa.shop with your order number.';
+      if (s.indexOf('refund') !== -1) return 'Demo answer: if you paid but no code was delivered, you can get a refund. After a valid code is delivered, change-of-mind returns are not accepted — see the Return Policy.';
+      if (s.indexOf('region') !== -1) return 'Demo answer: buy the region that matches your account — a USA code only works on a USA account. Use the region checker on the Steam page.';
+      if (s.indexOf('pay') !== -1 || s.indexOf('usdt') !== -1 || s.indexOf('price') !== -1) return 'Demo answer: this demo accepts USDT (BEP20) only, and no real payment is taken. Pay the exact amount shown at checkout.';
+      return 'Demo answer: I can help with delivery, refunds, regions and payments. For anything else, email support@subvexa.shop (demo chat — no human replies).';
+    }
+    var chatSend = document.getElementById('chat-send');
+    var chatText = document.getElementById('chat-text');
+    function chatSubmit() {
+      if (!chatText || !chatText.value.trim()) return;
+      var body = document.getElementById('chat-body');
+      var q = chatText.value.trim(); chatText.value = '';
+      if (body) {
+        body.innerHTML += '<p class="chat-msg user">' + esc(q) + '</p>';
+        body.innerHTML += '<p class="chat-msg bot">' + esc(chatReply(q)) + '</p>';
+        body.scrollTop = body.scrollHeight;
+      }
+    }
+    if (chatSend) chatSend.addEventListener('click', chatSubmit);
+    if (chatText) chatText.addEventListener('keydown', function (e) { if (e.key === 'Enter') chatSubmit(); });
     renderCart();
     renderSearch();
     renderCheckout();
@@ -626,6 +769,12 @@
         openDemoModal('Notify me — demo', 'Thanks! In the live shop you would get an email as soon as ' + nm + ' is back in stock. This demo only saves it in this browser.');
         return;
       }
+      if ((t = e.target.closest('[data-resend]'))) {
+        var note = document.getElementById('resend-' + t.getAttribute('data-resend'));
+        if (note) note.textContent = 'Demo email resent just now — check your inbox (demo, not actually sent).';
+        openDemoModal('Code resent (demo)', 'A demo copy of the delivery email was “resent”. Nothing was actually emailed.');
+        return;
+      }
       if ((t = e.target.closest('[data-copy]'))) {
         var v = t.getAttribute('data-copy');
         if (navigator.clipboard) { navigator.clipboard.writeText(v); }
@@ -688,6 +837,7 @@
     getOrders: getOrders, seedOrders: seedOrders, filterCatalog: filterCatalog, genCode: genCode,
     fmtTime: fmtTime, qrPattern: qrPattern, effectiveProduct: effectiveProduct,
     getOverrides: getOverrides, fmt: fmt, getUser: getUser, getSettings: getSettings,
+    regionOf: regionOf, loyaltyPoints: loyaltyPoints, stamp: stamp, productCardHTML: productCardHTML,
     _lsGet: lsGet, _lsSet: lsSet, _K: K };
   if (typeof module !== 'undefined' && module.exports) { module.exports = API; }
   if (typeof globalThis !== 'undefined') { globalThis.SVDemo = API; }

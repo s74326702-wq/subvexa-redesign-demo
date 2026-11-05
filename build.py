@@ -32,14 +32,38 @@ def header(active, depth=0):
 
 TRUST = '''<div class="trust"><div><strong>500+ gift cards</strong> &middot; <strong>50,000+ happy customers</strong> &middot; <strong>4.2/5 on Trustpilot</strong></div><div class="badges"><span class="badge">🔒 128-bit SSL secure</span><span class="badge blue">🛡️ PCI DSS compliant</span><span class="badge purple">💬 WhatsApp &amp; Telegram support</span><span class="badge">✉️ support@subvexa.shop</span></div></div>'''
 
+# Real-site learnings (Eneba / Dundle / SEAGM): region mismatch is the #1
+# dispute cause; buyer protection + reviews are the trust moat.
+def region_warn(p=""):
+    return f'''<div class="box warn region-warn"><h3 style="margin-top:0">⚠️ Region check — the #1 reason orders go wrong</h3><p>Buy the region that matches your account. A <strong>USA</strong> code only works on a <strong>USA</strong> account — a USA code will <strong>not</strong> redeem on a KSA, Europe or India account. Check the flag badge and the region on the card before you pay. Delivered codes cannot be refunded or exchanged.</p><p><a class="btn btn-ghost" href="{p}blog/steam-region-guide.html">Read the region guide →</a></p></div>'''
+
+REGION_WARN_TOOLS = '''<div class="box warn region-warn"><h3 style="margin-top:0">⚠️ Before you buy — check region &amp; redemption</h3><p>Some tools are tied to an account region or a specific redemption method. Check the product note, the redemption requirements and the expiry before you pay. Delivered accounts and codes cannot be refunded or exchanged — see the <a href="blog/check-before-you-buy.html">pre-purchase checklist</a>.</p></div>'''
+
+PROTECT = '''<div class="protect"><span class="protect-title">🛡️ Buyer Protection</span><span>✅ Activation guarantee — replace or refund if a code won&apos;t activate</span><span>↩️ Unviewed-code refund</span><span>🔒 Escrow-style hold — payment held until delivery is confirmed</span></div>'''
+
+REVIEWS = '''<div class="reviews"><div class="reviews-head"><strong>★★★★★ 4.2/5 on Trustpilot</strong><span class="tag">Demo reviews — sample feedback shown for design; not real Trustpilot data.</span></div><div class="review-grid">
+<div class="review-card"><div class="stars">★★★★★</div><p>“Steam $50 code arrived in about 30 seconds. Show Code worked first try.”</p><p class="tag">Rahul · India · Steam Wallet $50</p></div>
+<div class="review-card"><div class="stars">★★★★★</div><p>“Almost bought the wrong region — the region checker caught it before I paid.”</p><p class="tag">Marta · Spain · Steam Europe €50</p></div>
+<div class="review-card"><div class="stars">★★★★☆</div><p>“Outlook Mail for $0.10, delivered instantly to my account. Will buy again.”</p><p class="tag">Ken · Singapore · Outlook Mail</p></div>
+</div></div>'''
+
+LOYALTY = '''<div class="loyalty"><div><strong>🎁 Subvexa Rewards (demo)</strong> — earn <strong>5% back in demo points</strong> on every delivered order. 100 points = $1 off your next order (demo).</div><div>Your demo balance: <strong id="loyalty-balance">…</strong> · <a href="account.html">See rewards →</a></div></div>'''
+
 def footer(depth=0):
     p = "" if depth == 0 else "../"
     return f'''<footer class="site"><div class="foot">
 <div><h4>subvexa.</h4><p style="font-size:14px">Buy Gift Cards with Cryptocurrency | Subvexa</p><p style="font-size:14px">Digital gift cards, AI tools and more &mdash; delivered instantly by email and in your account.</p></div>
 <div><h4>Shop</h4><a href="{p}gift-cards.html">Gift Cards</a><a href="{p}ai-tools.html">AI &amp; Tools</a><a href="{p}other-tools.html">Other Tools</a><a href="{p}brand/steam.html">Steam Gift Cards</a><a href="{p}payment-methods.html">Payment Methods</a><a href="{p}cart.html">Cart</a><a href="{p}search.html">Search</a></div>
-<div><h4>Help</h4><a href="{p}how-to-buy.html">How to Buy</a><a href="{p}my-orders.html">My Orders</a><a href="{p}support.html">Support &amp; FAQ</a><a href="{p}account.html">My Account</a><a href="{p}login.html">Sign In (demo)</a><a href="{p}blog.html">Blog</a><a href="{p}blog/steam-region-guide.html">Steam Region Guide</a><a href="{p}terms.html">Terms &amp; Conditions</a></div>
+<div><h4>Help</h4><a href="{p}how-to-buy.html">How to Buy</a><a href="{p}my-orders.html">My Orders</a><a href="{p}support.html">Support &amp; FAQ</a><a href="{p}help.html">Help Center</a><a href="{p}account.html">My Account</a><a href="{p}login.html">Sign In (demo)</a><a href="{p}blog.html">Blog</a><a href="{p}blog/steam-region-guide.html">Steam Region Guide</a><a href="{p}terms.html">Terms &amp; Conditions</a></div>
 <div><h4>Legal</h4><a href="{p}terms.html">Terms &amp; Conditions</a><a href="{p}privacy.html">Privacy Policy</a><a href="{p}returns.html">Return Policy</a><a href="{p}payment-methods.html">Payment Methods</a><a href="{p}how-to-buy.html">How to Buy</a><a href="{p}admin/index.html">Admin Panel (demo)</a></div>
 </div><div class="foot-bottom">&copy; Subvexa &middot; Independent digital marketplace &middot; Availability and final pricing verified before payment &middot; Support: support@subvexa.shop</div></footer>
+<button class="chat-fab" id="chat-fab">💬 24/7 Support</button>
+<div class="chat-panel" id="chat-panel" style="display:none">
+<div class="chat-head"><strong>Subvexa Support — demo chat</strong><span class="tag">24/7 · demo</span><button id="chat-close" class="chat-x">✕</button></div>
+<div class="chat-body" id="chat-body"><p class="chat-msg bot">Hi! I&apos;m the demo support bot. Ask me about delivery, refunds, regions or payments — or email support@subvexa.shop.</p></div>
+<div class="chat-input"><input id="chat-text" type="text" placeholder="Type your question… (demo)"><button id="chat-send" class="btn btn-purple">Send</button></div>
+<p class="tag" style="padding:0 14px 12px;margin:0">Demo chat — no human replies; nothing leaves this browser.</p>
+</div>
 <div class="modal-back" id="demo-modal"><div class="modal"><h3 id="demo-modal-title">Demo</h3><p id="demo-modal-text"></p><button class="btn btn-purple" onclick="closeDemoModal()">Got it</button></div></div>'''
 
 def page(title, active, body, depth=0):
@@ -61,13 +85,17 @@ def write(rel, html):
 def pid_for(name):
     return PRODUCT_IDS.get(name) or ("prod-" + "".join(c if c.isalnum() else "-" for c in name.lower()).strip("-")[:40])
 
+# Demo low-stock counts (real-site learning: "Only X left" urgency + stock honesty).
+LOW_STOCK = {"ai-gemini-12m": 3, "ot-outlook": 5, "gc-steam-100": 2}
+
 def buy_card(name, price, note="", out=False, notify_name=None):
     pid = pid_for(name)
+    low = "" if out else (f'<div class="low-stock">⚡ Only {LOW_STOCK[pid]} left</div>' if pid in LOW_STOCK else "")
     if out:
         return (f'<div class="card out" data-pid="{pid}"><h3>{name}</h3><div class="price">{price}</div>'
                 f'<div class="tag">{note or "Currently out of stock"}</div>'
                 f'<div class="buy"><button class="notify" data-notify="{notify_name or name}">🔔 Notify me</button></div></div>')
-    return (f'<div class="card" data-pid="{pid}"><h3>{name}</h3><div class="price">{price}</div>'
+    return (f'<div class="card" data-pid="{pid}"><h3>{name}</h3><div class="price">{price}</div>{low}'
             f'<div class="tag">{note}</div>'
             f'<div class="buy"><button class="btn btn-green" data-add="{pid}">Add to cart</button> '
             f'<button class="btn btn-ghost" data-buynow="{pid}">Buy now</button></div></div>')
@@ -199,6 +227,7 @@ def index_page():
 <p>Buy Gift Cards with Cryptocurrency | Subvexa — Steam, PlayStation, Xbox, PUBG and 500+ brands, delivered instantly to your email and account. Pay with USDT.</p>
 <div class="cta"><a class="btn btn-green" href="gift-cards.html">Shop gift cards</a><a class="btn btn-white" href="ai-tools.html">Explore AI &amp; Tools</a></div></div>
 {TRUST}
+{REVIEWS}
 <div class="stats">
 <div class="stat"><b>500+</b><span>gift cards</span></div>
 <div class="stat"><b>2,218</b><span>brands in catalog</span></div>
@@ -217,6 +246,7 @@ def index_page():
 <p><a class="btn btn-ghost" href="other-tools.html">See all 13 Other Tools →</a></p>
 <h2>Discounts</h2><p class="section-sub">Today&apos;s best value picks.</p>
 <div class="grid">{buy_card("Gemini Plus 12m Links", "$0.60", "Was $0.90 · AI & Tools")}{buy_card("Amazon Prime Video 1M", "$0.60", "Was $0.90 · Other Tools")}{buy_card("Outlook Mail", "$0.10", "Lowest price · Other Tools")}{buy_card("Wispr Flow Pro 2 Months", "$0.30", "AI & Tools")}</div>
+{LOYALTY}
 <h2>Why Subvexa?</h2>
 <div class="usps">
 <div class="usp"><div class="icon">🛡️</div><h3>Secure payments</h3><p>128-bit SSL, crypto checkout with on-chain verification, and a clear refund policy if delivery fails.</p></div>
@@ -238,6 +268,8 @@ def gift_cards_page():
     body = f'''<h1 style="margin-top:0">Gift Cards</h1>
 <p class="section-sub">Pick a brand, then pick your region — each region is a separate card with its own denominations. Prices are indicative; the final price is verified before payment.</p>
 {TRUST}
+{region_warn()}
+{PROTECT}
 <div class="tiles">{tiles}</div>
 <h2>How it works</h2>
 <div class="progress"><span>1 · Choose a brand &amp; region</span><span>2 · Pick a value</span><span>3 · Pay with USDT</span><span>4 · Show Code &amp; redeem</span></div>
@@ -257,18 +289,25 @@ def steam_page():
     ]
     cards = ""
     for flag, name, vals, out in regions:
+        region = name.split(" — ")[1]
         if out:
-            cards += (f'<div class="card out"><h3><span class="flag">{flag}</span>{name}</h3>'
+            cards += (f'<div class="card out" data-region="{region}"><h3><span class="flag">{flag}</span>{name}</h3>'
                       f'<div class="price">{vals}</div><div class="tag">Currently out of stock</div>'
                       f'<div class="buy"><button class="notify" data-notify="{name}">🔔 Notify me</button></div></div>')
         else:
-            cards += (f'<div class="card"><h3><span class="flag">{flag}</span>{name}</h3>'
+            cards += (f'<div class="card" data-region="{region}"><h3><span class="flag">{flag}</span>{name}</h3>'
                       f'<div class="price">{vals}</div><div class="tag">In stock · Instant delivery</div>'
                       f'<div class="buy"><a class="btn btn-green" href="#denominations">Choose value →</a></div></div>')
     body = f'''<p class="section-sub"><a href="../gift-cards.html">Gift Cards</a> / <strong>Steam</strong></p>
 <h1 style="margin-top:0">🎮 Steam Gift Cards</h1>
 <p class="section-sub">One brand, many regions. Pick the region that matches your Steam account — a USA code will not work on a KSA account.</p>
 {TRUST}
+<div class="box region-helper"><h3 style="margin-top:0">🌍 Region checker (demo)</h3>
+<p>Select your Steam account country — the matching region card lights up, the others dim.</p>
+<select id="region-select"><option value="">— Select your Steam account country —</option><option>USA</option><option>Europe</option><option>KSA</option><option>UAE</option><option>India</option><option>Turkey</option><option>Hong Kong</option><option>Singapore</option></select>
+<p id="region-result" class="tag">Select your Steam account country to highlight the matching region.</p></div>
+{region_warn("../")}
+{PROTECT}
 <h2>Choose your region</h2>
 <div class="grid">{cards}</div>
 <h2 id="denominations">Denominations — Steam USA</h2>
@@ -279,6 +318,7 @@ def steam_page():
 {buy_card("Steam Wallet — USA $50", "$50.00", "Gift card · Instant delivery")}
 {buy_card("Steam Wallet — USA $100", "$100.00", "Gift card · Instant delivery")}
 </div>
+{REVIEWS}
 <div class="box warn"><h3 style="margin-top:0">⚠️ Redemption requirements</h3>
 <p>Use the code on a Steam account from the <strong>same region</strong> as the card. Check the region, currency and expiry before paying. Codes are delivered to your account and email after payment — click <strong>Show Code</strong>, copy and redeem on Steam. Delivered codes cannot be refunded or exchanged.</p></div>
 <h2>Steam FAQ</h2><div class="faq">
@@ -287,6 +327,8 @@ def steam_page():
 <details><summary>Can I get a refund after delivery?</summary><p>No — once a valid code is delivered it cannot be refunded or exchanged. If you paid but no code was delivered, contact support@subvexa.shop for a refund.</p></details>
 <details><summary>What if my code shows as already used or invalid?</summary><p>Contact support with your order number and the exact error message. Do not publish the code anywhere.</p></details>
 <details><summary>Can I pay with crypto?</summary><p>Yes — USDT (BEP20). The exact amount and wallet address are shown at checkout. See <a href="../payment-methods.html">Payment Methods</a>.</p></details>
+<details><summary>How do I redeem a Steam code?</summary><p>Open Steam → Games → Redeem a Steam Wallet Code, paste the code and confirm. Full steps: <a href="../blog/how-to-redeem-steam-code.html">How to redeem a Steam code</a>.</p></details>
+<details><summary>What should I check before buying any gift card?</summary><p>Region, denomination, expiry and fees — the full list is in <a href="../blog/check-before-you-buy.html">What to check before buying a gift card</a>.</p></details>
 <details><summary>Do Steam cards expire?</summary><p>Check the expiry on the product page before paying. Some regional cards carry an expiry date.</p></details>
 </div>
 <div class="shopbox"><strong>Shop from this guide:</strong> <a class="btn btn-green" href="#denominations">Buy Steam USA $50 →</a> <a class="btn btn-ghost" href="../blog/steam-region-guide.html">Read the full region guide →</a></div>'''
@@ -296,7 +338,11 @@ def ai_tools_page():
     body = f'''<h1 style="margin-top:0">AI &amp; Tools</h1>
 <p class="section-sub">22 products &middot; auto delivery &middot; prices indicative, final price verified at checkout. Out-of-stock items show a Notify me button instead of disappearing.</p>
 {TRUST}
+{REGION_WARN_TOOLS}
+{PROTECT}
 {product_grid(AI_TOOLS, AI_OUT)}
+<div class="box"><h3 style="margin-top:0">Before you buy</h3><p>Check the region, redemption method and expiry for each product — the 2-minute checklist: <a href="blog/check-before-you-buy.html">What to check before buying a gift card</a>. Buyer Protection applies to every order: activation guarantee, unviewed-code refund, escrow-style hold until delivery.</p></div>
+{REVIEWS}
 <p class="tag" style="margin-top:16px">Note: Eleven Reader Ultra Plan 12M and Gemini AI Pro 18 Month are no longer available from the supplier, so they are not listed. Prices follow the live shop where documented.</p>'''
     write("ai-tools.html", page("AI & Tools", "ai-tools.html", body))
 
@@ -304,7 +350,11 @@ def other_tools_page():
     body = f'''<h1 style="margin-top:0">Other Tools</h1>
 <p class="section-sub">13 products &middot; VPNs, streaming, Office, music &amp; more &middot; auto delivery.</p>
 {TRUST}
-{product_grid(OTHER_TOOLS, OTHER_OUT)}'''
+{REGION_WARN_TOOLS}
+{PROTECT}
+{product_grid(OTHER_TOOLS, OTHER_OUT)}
+<div class="box"><h3 style="margin-top:0">Before you buy</h3><p>Check the region, redemption method and expiry for each product — the 2-minute checklist: <a href="blog/check-before-you-buy.html">What to check before buying a gift card</a>. Buyer Protection applies to every order: activation guarantee, unviewed-code refund, escrow-style hold until delivery.</p></div>
+{REVIEWS}'''
     write("other-tools.html", page("Other Tools", "other-tools.html", body))
 
 def how_to_page():
@@ -314,7 +364,7 @@ def how_to_page():
 {TRUST}
 <div class="steps">
 <div class="step"><b>1 · Register</b><h3>Create your account</h3><p>Sign up with your email and verify it. One account per user, one email per account. You need to be 18+.</p></div>
-<div class="step"><b>2 · Buy</b><h3>Pick a product &amp; pay</h3><p>Choose a brand and region, pick a value, then pay with USDT (BEP20). The exact amount and wallet are shown at checkout.</p></div>
+<div class="step"><b>2 · Buy</b><h3>Pick a product &amp; pay</h3><p>Choose a brand and region, pick a value, then pay with USDT (BEP20). The exact amount and wallet are shown at checkout. First, use the region checker on the product page — a wrong region is the #1 reason orders fail. At checkout you confirm the regions match and tick the instant-delivery consent box.</p></div>
 <div class="step"><b>3 · Verify</b><h3>Payment check</h3><p>Your payment is verified on-chain. This usually takes under a minute. You can watch the order progress in My Orders.</p></div>
 <div class="step"><b>4 · Track order</b><h3>Show Code &amp; redeem</h3><p>When the order is DELIVERED, open My Orders, click Show Code, copy the code and redeem it. A copy is also emailed to you.</p></div>
 </div>
@@ -360,7 +410,7 @@ def payment_methods_page():
 
 def my_orders_page():
     body = f'''<h1 style="margin-top:0">My Orders</h1>
-<p class="section-sub">All your orders — gift cards and digital goods — in one single section. Orders are rendered live from your demo order history (localStorage), including any order you complete in this demo checkout.</p>
+<p class="section-sub">All your orders — gift cards and digital goods — in one single section. Orders are rendered live from your demo order history (localStorage), including any order you complete in this demo checkout. Most orders deliver in ~30 seconds after payment is confirmed — each order below shows a delivery timeline with timestamps.</p>
 {TRUST}
 <div class="filters">
 <button class="active" data-order-filter="all">All</button>
@@ -436,7 +486,7 @@ def support_page():
 <details><summary>Which payment methods do you accept?</summary><p>USDT (BEP20) is live. See the full <a href="payment-methods.html">Payment Methods</a> page.</p></details>
 <details><summary>How do I track my order?</summary><p>Every order has a status timeline in <a href="my-orders.html">My Orders</a>: Ordered → Payment → Issuing → Delivered.</p></details>
 </div>
-<p><a class="btn btn-purple" href="how-to-buy.html">How to Buy hub →</a> <a class="btn btn-ghost" href="my-orders.html">My Orders →</a></p>'''
+<p><a class="btn btn-purple" href="how-to-buy.html">How to Buy hub →</a> <a class="btn btn-ghost" href="my-orders.html">My Orders →</a> <a class="btn btn-ghost" href="help.html">Help Center →</a></p>'''
     write("support.html", page("Support & FAQ", "support.html", body))
 
 def admin_pages():
@@ -499,6 +549,8 @@ def blog_page():
 <div class="card"><h3>How to buy on Subvexa in under a minute</h3><div class="tag">Register, pick a card, pay with USDT, Show Code. · Guides</div><div class="buy"><a class="btn btn-purple" href="how-to-buy.html">Read →</a></div></div>
 <div class="card"><h3>USDT (BEP20) payments, explained simply</h3><div class="tag">What BEP20 is, and why the exact amount matters. · Crypto</div><div class="buy"><a class="btn btn-purple" href="payment-methods.html">Read →</a></div></div>
 <div class="card"><h3>PlayStation vs Xbox gift cards: which region?</h3><div class="tag">Same rule as Steam — match the region to your account. · Gaming</div><div class="buy"><a class="btn btn-purple" href="blog/steam-region-guide.html">Read the region guide →</a></div></div>
+<div class="card"><h3>How to redeem a Steam code</h3><div class="tag">Client, website and app — step by step, plus what to do if it fails. · Guides</div><div class="buy"><a class="btn btn-purple" href="blog/how-to-redeem-steam-code.html">Read →</a></div></div>
+<div class="card"><h3>What to check before buying a gift card</h3><div class="tag">Region, value, expiry, fees — the 2-minute checklist. · Guides</div><div class="buy"><a class="btn btn-purple" href="blog/check-before-you-buy.html">Read →</a></div></div>
 </div>
 <div class="box" style="margin-top:20px"><h3 style="margin-top:0">📬 Weekly digest</h3><p>One email a week: new products, price drops and guides. (Demo — no signup is stored.)</p><button class="btn btn-purple" data-demo-buy="Weekly digest signup (demo)">Subscribe</button></div>'''
     write("blog.html", page("Blog", "blog.html", body))
@@ -522,6 +574,84 @@ def blog_article_page():
 <p><a href="../blog.html">← Back to the blog</a></p>
 </article>'''
     write("blog/steam-region-guide.html", page("Steam region guide", "blog.html", body, depth=1))
+
+def blog_redeem_page():
+    body = f'''<article class="article">
+<p class="section-sub"><a href="../blog.html">Blog</a> / Guides</p>
+<h1 style="margin-top:0">How to redeem a Steam code</h1>
+<p class="tag">5 Nov 2026 · 3 min read · Buyer guide</p>
+{TRUST}
+<p>You have your code — here is how to turn it into Steam Wallet credit. The code works only on a Steam account from the <strong>same region</strong> as the card, so check the region first (see the <a href="steam-region-guide.html">Steam region guide</a>).</p>
+<h2>1 · In the Steam client (PC / Mac)</h2>
+<p>Open Steam → click <strong>Games</strong> in the top menu → <strong>Redeem a Steam Wallet Code</strong> → paste your code → confirm. The balance appears in your wallet immediately.</p>
+<h2>2 · On the Steam website</h2>
+<p>Sign in at store.steampowered.com, open your account details, choose <strong>Redeem a Steam Gift Card or Wallet Code</strong>, paste the code and confirm.</p>
+<h2>3 · In the Steam mobile app</h2>
+<p>Open the app → Store → your account → <strong>Redeem a Steam Gift Card or Wallet Code</strong> → paste and confirm.</p>
+<h2>If the code fails</h2>
+<p>Read the exact error message and do <strong>not</strong> buy a second card. The usual causes: wrong region, a typo when pasting, or the code was already redeemed. Keep your order confirmation and contact support@subvexa.shop with your order number and the exact error.</p>
+<div class="shopbox"><strong>Shop from the blog:</strong> Steam USA $50 · Steam Europe €50 · Steam KSA — <a class="btn btn-green" href="../brand/steam.html">See all Steam regions →</a></div>
+<p><a href="../blog.html">← Back to the blog</a></p>
+</article>'''
+    write("blog/how-to-redeem-steam-code.html", page("How to redeem a Steam code", "blog.html", body, depth=1))
+
+def blog_checklist_page():
+    body = f'''<article class="article">
+<p class="section-sub"><a href="../blog.html">Blog</a> / Guides</p>
+<h1 style="margin-top:0">What to check before buying a gift card</h1>
+<p class="tag">5 Nov 2026 · 4 min read · Buyer guide</p>
+{TRUST}
+<p>Two minutes of checking before you pay saves the most common gift-card headaches. Work through this list every time.</p>
+<h2>1 · Region — the big one</h2>
+<p>Buy the region that matches your account. A USA code only works on a USA account. Check the flag badge on the product card.</p>
+<h2>2 · Denomination &amp; currency</h2>
+<p>Check the face value and the currency you pay in. Compare the <strong>final total at checkout</strong>, not just the face value — fees and conversion change the real cost.</p>
+<h2>3 · Expiry</h2>
+<p>Some regional cards carry an expiry date. Read the redemption-requirements box on the product page before paying.</p>
+<h2>4 · Redemption method</h2>
+<p>Code, account login, or direct top-up? Know what you will receive and where it appears — on Subvexa, codes appear in My Orders and in your email.</p>
+<h2>5 · Buyer protection</h2>
+<p>Check the seller&apos;s protection: activation guarantee, unviewed-code refund, and what happens if delivery fails. On Subvexa, Buyer Protection is shown on every product page.</p>
+<h2>6 · Delivery email</h2>
+<p>Make sure the email on your account is correct — the delivery email goes there. Check spam/promotions if it does not arrive.</p>
+<h2>7 · If a code fails, don&apos;t buy twice</h2>
+<p>Keep the order confirmation and the exact error message, and contact support with your order number. A second purchase will not fix the first one — and delivered codes cannot be refunded.</p>
+<div class="shopbox"><strong>Shop from the blog:</strong> <a class="btn btn-green" href="../gift-cards.html">Browse all gift cards →</a> <a class="btn btn-ghost" href="../brand/steam.html">Steam regions →</a></div>
+<p><a href="../blog.html">← Back to the blog</a></p>
+</article>'''
+    write("blog/check-before-you-buy.html", page("What to check before buying a gift card", "blog.html", body, depth=1))
+
+def help_page():
+    body = f'''<h1 style="margin-top:0">Help Center</h1>
+<p class="section-sub">Answers grouped by topic. Still stuck? <a href="support.html">Contact support →</a></p>
+{TRUST}
+<h2>📦 Orders &amp; delivery</h2><div class="faq">
+<details><summary>Where is my code after I pay?</summary><p>In My Orders — click Show Code — and in your email. Both appear the moment the order is DELIVERED, usually ~30 seconds after payment is confirmed.</p></details>
+<details><summary>How long does delivery take?</summary><p>Usually under a minute after payment is confirmed. If an order is still not delivered after 30 minutes, contact support with your order number.</p></details>
+<details><summary>I paid but nothing was delivered. What now?</summary><p>Check My Orders first — the order may still be validating. If it is still not delivered after 30 minutes, contact support@subvexa.shop with your order number and transaction hash. If delivery fails, you are refunded — see the <a href="returns.html">Return Policy</a>.</p></details>
+<details><summary>Can I resend my code?</summary><p>Yes — open the order in My Orders and use the Resend code button. The delivery email is re-sent to your account email.</p></details>
+</div>
+<h2>💳 Payments</h2><div class="faq">
+<details><summary>Which payment methods do you accept?</summary><p>USDT (BEP20) is live. See the full <a href="payment-methods.html">Payment Methods</a> page.</p></details>
+<details><summary>What if I pay the wrong amount?</summary><p>Pay the exact amount shown at checkout. If you over- or under-pay, contact support with the transaction hash — do not pay twice.</p></details>
+<details><summary>Why do I have to tick the consent box at checkout?</summary><p>For digital goods, EU rules require your express consent to instant delivery and your acknowledgement that the withdrawal right ends once the code is revealed. The box is not pre-ticked — you choose.</p></details>
+</div>
+<h2>🌍 Regions &amp; redemption</h2><div class="faq">
+<details><summary>I bought the wrong region. Can I exchange it?</summary><p>Delivered codes cannot be exchanged. Check the region on the product page before paying — see the <a href="blog/steam-region-guide.html">Steam region guide</a>.</p></details>
+<details><summary>How do I redeem a Steam code?</summary><p>Steam → Games → Redeem a Steam Wallet Code, paste and confirm. Full steps: <a href="blog/how-to-redeem-steam-code.html">How to redeem a Steam code</a>.</p></details>
+<details><summary>My code shows as invalid or already used.</summary><p>Contact support with your order number and the exact error message. Do not publish the code anywhere.</p></details>
+</div>
+<h2>↩️ Refunds</h2><div class="faq">
+<details><summary>Can I get a refund?</summary><p>If you paid but no code was delivered, yes — contact support. After a valid code is delivered, change-of-mind returns are not accepted. Faulty, wrong or undelivered products are replaced or refunded. See the <a href="returns.html">Return Policy</a>.</p></details>
+<details><summary>What is Buyer Protection?</summary><p>Every order is covered: activation guarantee (replace or refund if a code won&apos;t activate), unviewed-code refund, and an escrow-style hold — payment is held until delivery is confirmed.</p></details>
+</div>
+<h2>👤 Account</h2><div class="faq">
+<details><summary>Do I need an account to buy?</summary><p>Yes — orders are tied to your account so your codes are always in My Orders, even if the email is lost. You need to be 18+.</p></details>
+<details><summary>How do I change my email or password?</summary><p>Go to <a href="account.html">My Account</a> and edit your profile (demo — saved only in this browser).</p></details>
+<details><summary>What are Subvexa Rewards points?</summary><p>You earn 5% back in demo points on every delivered order. 100 points = $1 off your next order (demo). Your balance is on the homepage and in <a href="account.html">My Account</a>.</p></details>
+</div>
+<p><a class="btn btn-purple" href="support.html">Contact support →</a> <a class="btn btn-ghost" href="how-to-buy.html">How to Buy hub →</a></p>'''
+    write("help.html", page("Help Center", "help.html", body))
 
 def legal_pages():
     terms = f'''<h1 style="margin-top:0">Terms &amp; Conditions</h1>
@@ -571,5 +701,8 @@ if __name__ == "__main__":
     admin_pages()
     blog_page()
     blog_article_page()
+    blog_redeem_page()
+    blog_checklist_page()
+    help_page()
     legal_pages()
     print("done")
