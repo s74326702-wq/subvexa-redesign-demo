@@ -77,7 +77,7 @@
   ];
   var BRANDS = ['Steam', 'PlayStation', 'Xbox', 'Apple', 'Google Play', 'Amazon',
     'PUBG Mobile', 'Roblox', 'Netflix', 'Spotify', 'Nintendo', 'Razer Gold'];
-  var SECTION_PAGE = { 'ai-tools': 'ai-tools.html', 'other-tools': 'other-tools.html', 'gift-cards': 'gift-cards.html' };
+  var SECTION_PAGE = { 'ai-tools': 'tools.html', 'other-tools': 'tools.html', 'gift-cards': 'gift-cards.html' };
   var SECTION_LABEL = { 'ai-tools': 'AI & Tools', 'other-tools': 'Other Tools', 'gift-cards': 'Gift Cards' };
 
   function findProduct(id) {
@@ -351,7 +351,7 @@
     var root = document.getElementById('cart-root'); if (!root) return;
     var cart = getCart();
     if (!cart.length) {
-      root.innerHTML = '<div class="box"><h3 style="margin-top:0">Your cart is empty</h3><p>Add a gift card or tool from the shop, then come back here to check out. (Demo — nothing is charged.)</p><a class="btn btn-green" href="gift-cards.html">Browse gift cards →</a> <a class="btn btn-ghost" href="ai-tools.html">AI &amp; Tools →</a></div>';
+      root.innerHTML = '<div class="box"><h3 style="margin-top:0">Your cart is empty</h3><p>Add a gift card or tool from the shop, then come back here to check out. (Demo — nothing is charged.)</p><a class="btn btn-green" href="gift-cards.html">Browse gift cards →</a> <a class="btn btn-ghost" href="tools.html">Tools →</a></div>';
       var t = document.getElementById('cart-total'); if (t) t.textContent = fmt(0);
       return;
     }

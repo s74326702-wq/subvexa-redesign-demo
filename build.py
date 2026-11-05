@@ -11,7 +11,7 @@ def header(active, depth=0):
     p = "" if depth == 0 else "../"
     nav = [
         ("index.html", "Home"), ("gift-cards.html", "Gift Cards"),
-        ("ai-tools.html", "AI & Tools"), ("other-tools.html", "Other Tools"),
+        ("tools.html", "Tools"),
         ("my-orders.html", "My Orders"), ("how-to-buy.html", "Help & Support"),
         ("cart.html", "🛒 Cart"), ("search.html", "Search"),
         ("support.html", "Support"), ("admin/index.html", "Admin"),
@@ -53,7 +53,7 @@ def footer(depth=0):
     p = "" if depth == 0 else "../"
     return f'''<footer class="site"><div class="foot">
 <div><h4>subvexa.</h4><p style="font-size:14px">Buy Gift Cards with Cryptocurrency | Subvexa</p><p style="font-size:14px">Digital gift cards, AI tools and more &mdash; delivered instantly by email and in your account.</p></div>
-<div><h4>Shop</h4><a href="{p}gift-cards.html">Gift Cards</a><a href="{p}ai-tools.html">AI &amp; Tools</a><a href="{p}other-tools.html">Other Tools</a><a href="{p}brand/steam.html">Steam Gift Cards</a><a href="{p}payment-methods.html">Payment Methods</a><a href="{p}cart.html">Cart</a><a href="{p}search.html">Search</a></div>
+<div><h4>Shop</h4><a href="{p}gift-cards.html">Gift Cards</a><a href="{p}tools.html">Tools (37 products)</a><a href="{p}brand/steam.html">Steam Gift Cards</a><a href="{p}payment-methods.html">Payment Methods</a><a href="{p}cart.html">Cart</a><a href="{p}search.html">Search</a></div>
 <div><h4>Help</h4><a href="{p}how-to-buy.html">How to Buy</a><a href="{p}my-orders.html">My Orders</a><a href="{p}support.html">Support &amp; FAQ</a><a href="{p}help.html">Help Center</a><a href="{p}account.html">My Account</a><a href="{p}login.html">Sign In (demo)</a><a href="{p}blog.html">Blog</a><a href="{p}blog/steam-region-guide.html">Steam Region Guide</a><a href="{p}terms.html">Terms &amp; Conditions</a></div>
 <div><h4>Legal</h4><a href="{p}terms.html">Terms &amp; Conditions</a><a href="{p}privacy.html">Privacy Policy</a><a href="{p}returns.html">Return Policy</a><a href="{p}payment-methods.html">Payment Methods</a><a href="{p}how-to-buy.html">How to Buy</a><a href="{p}admin/index.html">Admin Panel (demo)</a></div>
 </div><div class="foot-bottom">&copy; Subvexa &middot; Independent digital marketplace &middot; Availability and final pricing verified before payment &middot; Support: support@subvexa.shop</div></footer>
@@ -223,7 +223,7 @@ def index_page():
     body = f'''
 <div class="hero hero-split"><div><span class="eyebrow">Buy Gift Cards with Cryptocurrency | Subvexa</span><h1>Gift cards with crypto.<br>Delivered in seconds.</h1>
 <p>Steam, PlayStation, Xbox, PUBG and 500+ brands — pick your region, pay with USDT, and your code appears in your account and email. No waiting, no paperwork.</p>
-<div class="cta"><a class="btn btn-green" href="gift-cards.html">Shop gift cards</a><a class="btn btn-white" href="ai-tools.html">Explore AI &amp; Tools</a></div>
+<div class="cta"><a class="btn btn-green" href="gift-cards.html">Shop gift cards</a><a class="btn btn-white" href="tools.html">Explore Tools</a></div>
 <div class="hero-chips"><span>⚡ Instant delivery</span><span>₮ Pay with USDT</span><span>🛡️ Buyer Protection</span><span>🌍 8 Steam regions</span></div></div>
 <div class="hero-visual"><div class="showcase"><div class="showcase-top"><span>🎮 Steam · USA</span><span class="pill-instant">⚡ Instant</span></div><h3>Steam Wallet — USA $50</h3><div class="stars">★★★★★ <span>4.8 · 2,300+ bought (demo)</span></div><div class="showcase-price">$50.00</div><div class="tracker"><span class="done">Paid<br><small>14:02:21</small></span><span class="done">Code issued<br><small>14:02:26</small></span><span class="done">Delivered<br><small>~30 sec</small></span></div><div class="codebox"><span>DEMO-7K2Q-9X4M-3P8W</span><button class="copybtn" data-copy="DEMO-7K2Q-9X4M-3P8W">Copy</button></div><p class="tag" style="color:#94a3b8">Sample delivery preview — demo code, not a real code.</p><div class="buy"><button class="btn btn-green" data-add="gc-steam-50">Add to cart</button> <button class="btn btn-ghost" data-buynow="gc-steam-50" style="background:#fff;color:#4f46e5">Buy now</button></div></div></div></div>
 {TRUST}
@@ -233,7 +233,7 @@ def index_page():
 <div class="section-head"><h2>Popular gift cards</h2><a href="gift-cards.html">See all →</a></div>
 <p class="section-sub">Most bought this week.</p>
 <div class="grid">{popular}</div>
-<p style="margin-top:20px"><a class="btn btn-ghost" href="ai-tools.html">AI &amp; Tools →</a> <a class="btn btn-ghost" href="other-tools.html">Other Tools →</a> <a class="btn btn-ghost" href="how-to-buy.html">How to Buy →</a></p>'''
+<p style="margin-top:20px"><a class="btn btn-ghost" href="tools.html">Tools — 37 products →</a> <a class="btn btn-ghost" href="how-to-buy.html">How to Buy →</a></p>'''
     write("index.html", page("Buy Gift Cards with Cryptocurrency", "index.html", body))
 
 def gift_cards_page():
@@ -309,28 +309,48 @@ def steam_page():
 <div class="shopbox"><strong>Shop from this guide:</strong> <a class="btn btn-green" href="#denominations">Buy Steam USA $50 →</a> <a class="btn btn-ghost" href="../blog/steam-region-guide.html">Read the full region guide →</a></div>'''
     write("brand/steam.html", page("Steam Gift Cards", "gift-cards.html", body, depth=1))
 
-def ai_tools_page():
-    body = f'''<h1 style="margin-top:0">AI &amp; Tools</h1>
-<p class="section-sub">22 products &middot; auto delivery &middot; prices indicative, final price verified at checkout. Out-of-stock items show a Notify me button instead of disappearing.</p>
+def tools_page():
+    body = f'''<h1 style="margin-top:0">Tools</h1>
+<p class="section-sub">37 products in one place — 24 AI &amp; Tools + 13 Other Tools &middot; auto delivery &middot; prices indicative, final price verified at checkout. Out-of-stock items show a Notify me button instead of disappearing.</p>
 {TRUST}
 {REGION_WARN_TOOLS}
 {PROTECT}
-{product_grid(AI_TOOLS, AI_OUT)}
+<div class="filters">
+<button class="active" onclick="toolsFilter(this,'all')">All 35</button>
+<button onclick="toolsFilter(this,'ai')">AI &amp; Tools (24)</button>
+<button onclick="toolsFilter(this,'ot')">Other Tools (13)</button>
+</div>
+<div id="tools-ai"><h2>AI &amp; Tools</h2><p class="section-sub">24 products &middot; from $0.10 &middot; auto delivery.</p>
+{product_grid(AI_TOOLS, AI_OUT)}</div>
+<div id="tools-ot"><h2>Other Tools</h2><p class="section-sub">13 products &middot; VPNs, streaming, Office, music &amp; more.</p>
+{product_grid(OTHER_TOOLS, OTHER_OUT)}</div>
 <div class="box"><h3 style="margin-top:0">Before you buy</h3><p>Check the region, redemption method and expiry for each product — the 2-minute checklist: <a href="blog/check-before-you-buy.html">What to check before buying a gift card</a>. Buyer Protection applies to every order: activation guarantee, unviewed-code refund, escrow-style hold until delivery.</p></div>
 {REVIEWS}
-<p class="tag" style="margin-top:16px">Note: Eleven Reader Ultra Plan 12M and Gemini AI Pro 18 Month are no longer available from the supplier, so they are not listed. Prices follow the live shop where documented.</p>'''
-    write("ai-tools.html", page("AI & Tools", "ai-tools.html", body))
+<p class="tag" style="margin-top:16px">Note: Eleven Reader Ultra Plan 12M and Gemini AI Pro 18 Month are no longer available from the supplier, so they are not listed. Prices follow the live shop where documented.</p>
+<script>
+function toolsFilter(btn, which) {{
+  document.querySelectorAll('.filters button').forEach(function(b){{ b.classList.remove('active'); }});
+  btn.classList.add('active');
+  var ai = document.getElementById('tools-ai'), ot = document.getElementById('tools-ot');
+  if (ai) ai.style.display = (which === 'ot') ? 'none' : 'block';
+  if (ot) ot.style.display = (which === 'ai') ? 'none' : 'block';
+}}
+</script>'''
+    write("tools.html", page("Tools", "tools.html", body))
+
+def ai_tools_page():
+    body = f'''<h1 style="margin-top:0">AI &amp; Tools</h1>
+<p class="section-sub">AI &amp; Tools is now part of the combined <a href="tools.html">Tools</a> page — 37 products in one place.</p>
+<p><a class="btn btn-green" href="tools.html">Go to Tools →</a></p>
+<script>window.location.replace("tools.html");</script>'''
+    write("ai-tools.html", page("AI & Tools", "tools.html", body))
 
 def other_tools_page():
     body = f'''<h1 style="margin-top:0">Other Tools</h1>
-<p class="section-sub">13 products &middot; VPNs, streaming, Office, music &amp; more &middot; auto delivery.</p>
-{TRUST}
-{REGION_WARN_TOOLS}
-{PROTECT}
-{product_grid(OTHER_TOOLS, OTHER_OUT)}
-<div class="box"><h3 style="margin-top:0">Before you buy</h3><p>Check the region, redemption method and expiry for each product — the 2-minute checklist: <a href="blog/check-before-you-buy.html">What to check before buying a gift card</a>. Buyer Protection applies to every order: activation guarantee, unviewed-code refund, escrow-style hold until delivery.</p></div>
-{REVIEWS}'''
-    write("other-tools.html", page("Other Tools", "other-tools.html", body))
+<p class="section-sub">Other Tools is now part of the combined <a href="tools.html">Tools</a> page — 37 products in one place.</p>
+<p><a class="btn btn-green" href="tools.html">Go to Tools →</a></p>
+<script>window.location.replace("tools.html");</script>'''
+    write("other-tools.html", page("Other Tools", "tools.html", body))
 
 def how_to_page():
     body = f'''<h1 style="margin-top:0">How to Buy on Subvexa</h1>
@@ -418,7 +438,7 @@ def checkout_page():
 
 def search_page():
     body = f'''<h1 style="margin-top:0" id="search-title">Search the demo catalog</h1>
-<p class="section-sub">Searches all demo products: 22 AI &amp; Tools, 13 Other Tools and the gift-card catalog. Press Enter in the header search on any page to get here.</p>
+<p class="section-sub">Searches all demo products: 37 Tools (24 AI &amp; Tools + 13 Other Tools) and the gift-card catalog. Press Enter in the header search on any page to get here.</p>
 {TRUST}
 <div class="search" style="margin-bottom:16px"><input id="search-page-input" type="search" placeholder="Try Steam, VPN, Gemini, Outlook…"><button onclick="window.location.href='search.html?q='+encodeURIComponent(document.getElementById('search-page-input').value)">Search</button></div>
 <div id="search-results"><p class="tag">Type a search above, or open this page with ?q=steam.</p></div>'''
@@ -494,7 +514,7 @@ def admin_pages():
     write("admin/orders.html", page("Admin — Orders", "admin/index.html", body, depth=1))
     # Products
     body = f'''<h1 style="margin-top:0">Admin — Products</h1>
-<p class="section-sub">22 AI &amp; Tools + 13 Other Tools + gift cards. Edit a price or flip stock — demo only, stored in this browser, picked up by shop pages on next load.</p>
+<p class="section-sub">24 AI &amp; Tools + 13 Other Tools + gift cards. Edit a price or flip stock — demo only, stored in this browser, picked up by shop pages on next load.</p>
 {admin_nav}
 <div class="table-wrap" id="admin-products-root"><p class="tag">Loading demo products…</p></div>
 </div>'''
@@ -662,6 +682,7 @@ if __name__ == "__main__":
     index_page()
     gift_cards_page()
     steam_page()
+    tools_page()
     ai_tools_page()
     other_tools_page()
     how_to_page()
